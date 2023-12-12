@@ -30,9 +30,9 @@
                 </tr>
                 </thead>
                 <tbody style="border-width: 2px;border-color: var(--bs-table-color);">
-                @foreach($breeds as $breed)
+                @foreach($titles as $title)
                 <tr>
-                    <td style="background: rgb(194,158,158);">{{ucfirst($breed)}}</td>
+                    <td style="background: rgb(194,158,158);">{{ucfirst($title)}}</td>
                 </tr>
                 @endforeach
                 </tbody>
