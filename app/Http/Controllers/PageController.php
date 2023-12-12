@@ -29,4 +29,29 @@ class PageController extends Controller
             return "Failed to fetch data from the API.";
         }
     }
+
+    public function search(Request $request){
+
+        $query = $request->input('query');
+        // fetching data from the API with 5 random breeds
+       $response = Http::get('https://www.googleapis.com/books/v1/volumes?q=' . urlencode($query));
+
+        // Check if the request was successful and data is present
+        if ($response->successful()) {
+            $books = $response->json()['items'];
+
+            // Extracting titles from fetched books
+            $titles = [];
+            foreach ($books as $book) {
+                $title = $book['volumeInfo']['title'];
+                $titles[] = $title;
+            }
+
+            // Pass titles to the view
+            return view('index', compact('titles'));
+        } else {
+            // Handle the case when the request fails
+            return "Failed to fetch data from the API.";
+        }
+    }
 }
