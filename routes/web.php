@@ -22,3 +22,5 @@ use Illuminate\Support\Facades\Route;
 //This name can be used to generate a URL to this route
 Route::get("/",[PageController::class,'index'])->name('index');
 Route::get('/search', [PageController::class, 'search'])->name('search');
+Route::get('/books/{id}', [PageController::class, 'add'])->name('add');
+Route::get('/books/{id}/edit', [PageController::class, 'edit'])->name('edit');

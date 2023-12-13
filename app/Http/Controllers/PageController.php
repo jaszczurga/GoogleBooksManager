@@ -54,4 +54,26 @@ class PageController extends Controller
             return "Failed to fetch data from the API.";
         }
     }
+
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'nazwa' => 'required'
+        ]);
+
+        // Stworzenie celu
+        $cel = new Books;
+        $cel->tytul = $request->input('nazwa');
+        $cel->autor = $request->input('tresc');
+
+
+        $cel->save();
+
+        return redirect('/')->with('success', 'Cel dodany!');
+    }
+
+    public function edit($id)
+    {
+        return view('3details.edit')->with('cel', $id);
+    }
 }
