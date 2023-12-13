@@ -26,10 +26,6 @@
         </div>
             <button class="btn btn-primary" type="submit">szukaj</button>
         </form>
-        <br>
-        <a href="/myBooks">
-            <button class="btn btn-primary" type="submit" style="background-color: green;">moje</button>
-        </a>
     </div>
 </div>
 <div class="col-xxl-6 offset-xxl-3">
@@ -44,9 +40,21 @@
             <tbody>
             @foreach($books as $book)
             <tr>
-                <td style="width: 30%;border-width: 3px;border-color: var(--bs-table-color);">  <a href="/books/{{$book["id"]}}/edit">{{ucfirst($book["volumeInfo"]["title"])}}</a></td>
+                <td style="width: 30%;border-width: 3px;border-color: var(--bs-table-color);">  <a href="/books/{{$book["book_id"]}}/edit">{{ucfirst($book["tytul"])}}</a></td>
                 <td style="width: 30%;border-width: 3px;border-color: var(--bs-table-color);">
-                        <a href="/books/{{$book["id"]}}"><button class="btn btn-primary" type="submit">dodaj</button></a>
+                    <form
+                        method="POST"
+                        action="/books/{{ $book['id'] }}"
+                        onsubmit="return confirm('Do you really want to delete?');">
+                        {!! csrf_field() !!}
+                        <input
+                            type="hidden"
+                            name="_method"
+                            value="DELETE">
+                        <button
+                            type="submit"
+                            class="btn btn-danger">Delete</button>
+                    </form>
 
                 </td>
             </tr>

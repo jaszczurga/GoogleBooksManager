@@ -62,6 +62,7 @@ class PageController extends Controller
         // Check if data exists in cache
         if (Cache::has($cacheKey)) {
             $bookData = Cache::get($cacheKey);
+            $this->storeBookDetails($bookData);
         } else {
             $response = Http::get('https://www.googleapis.com/books/v1/volumes?q=' . $id);
 
@@ -95,7 +96,6 @@ class PageController extends Controller
     {
         $cacheKey = 'book_' . $id;
 
-
         // Check if data exists in cache
         if (Cache::has($cacheKey)) {
             $bookData = Cache::get($cacheKey);
@@ -125,5 +125,22 @@ class PageController extends Controller
         }
 
 //        return view('edit')->with('book', $bookData);
+    }
+
+
+    public function delete($id)
+    {
+        $book = Books::find($id);
+        $book->delete();
+
+        return redirect('/myBooks')->with('success', 'Cel zniszczony');
+    }
+
+    public function show()
+    {
+        $books = Books::all();
+        Log::info('Showing user profile for user: '.$books);
+        // var_dump($cele);
+        return view('MyBooks')->with('books', $books);
     }
 }

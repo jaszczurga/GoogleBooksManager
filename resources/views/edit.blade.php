@@ -34,7 +34,22 @@
                     <img src="{{$book["volumeInfo"]["imageLinks"]["thumbnail"]}}">
                     <p>autor: {{$book["volumeInfo"]["authors"][0]}}</p>
                     <p>{{$book["volumeInfo"]["title"]}}</p>
-                    <p>{{$book["id"]}}</p>
+                    <a href="/books/{{$book["id"]}}"><button class="btn btn-primary" type="submit">dodaj</button></a>
+                    <br>
+                    <br>
+                    <form
+                        method="POST"
+                        action="/books/{{$book['id']}}"
+                        onsubmit="return confirm('Do you really want to delete?');">
+                        {!! csrf_field() !!}
+                        <input
+                            type="hidden"
+                            name="_method"
+                            value="DELETE">
+                        <button
+                            type="submit"
+                            class="btn btn-danger">Delete</button>
+                    </form>
                     <p class="card-text"></p>
                 </div>
             </div>

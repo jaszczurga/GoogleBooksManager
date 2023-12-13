@@ -21,7 +21,9 @@ use Illuminate\Support\Facades\Route;
 //->name('index') is used to give a name to the route
 //This name can be used to generate a URL to this route
 Route::get("/",[PageController::class,'index'])->name('index');
+Route::get("/myBooks",[PageController::class,'show'])->name('show');
 Route::get('/search', [PageController::class, 'search'])->name('search');
 Route::get('/books/{id}', [PageController::class, 'store'])->name('store');
 Route::get('/books/{id}/edit', [PageController::class, 'edit'])->name('edit');
+Route::delete('/books/{id}', [App\Http\Controllers\PageController::class, 'delete']);
 
