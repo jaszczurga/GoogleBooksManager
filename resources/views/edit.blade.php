@@ -31,7 +31,7 @@
             <div class="card">
                 <div class="card-body p-4">
                     <h4 class="card-title">ksiazka</h4>
-
+                    <img src="{{$book["volumeInfo"]["imageLinks"]["thumbnail"]}}">
                     <p>autor: {{$book["volumeInfo"]["authors"][0]}}</p>
                     <p>{{$book["volumeInfo"]["title"]}}</p>
                     <p class="card-text"></p>

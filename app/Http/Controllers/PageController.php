@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 
 class PageController extends Controller
 {
     private $books;
+    private $query = "python";
 
     public function index(){
         // fetching data from the API with 5 random breeds
-        $response = Http::get('https://www.googleapis.com/books/v1/volumes?q=python');
+        $response = Http::get('https://www.googleapis.com/books/v1/volumes?q='.$this->query);
 
         // Check if the request was successful and data is present
         if ($response->successful()) {
@@ -81,8 +83,9 @@ class PageController extends Controller
 
     public function edit($id)
     {
+        Log::info($id);
         // fetching data from the API with 5 random breeds
-        $response = Http::get('https://www.googleapis.com/books/v1/volumes?q=python');
+        $response = Http::get('https://www.googleapis.com/books/v1/volumes?q='.urlencode($id));
 
         // Check if the request was successful and data is present
         if ($response->successful()) {
