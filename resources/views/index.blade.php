@@ -38,9 +38,9 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($titles as $title)
+            @foreach($books as $book)
             <tr>
-                <td style="width: 30%;border-width: 3px;border-color: var(--bs-table-color);">  <a href="/books/{id}/edit">{{ucfirst($title)}}</a></td>
+                <td style="width: 30%;border-width: 3px;border-color: var(--bs-table-color);">  <a href="/books/{{$book["id"]}}/edit">{{ucfirst($book["volumeInfo"]["title"])}}</a></td>
                 <td style="width: 30%;border-width: 3px;border-color: var(--bs-table-color);">
                     <form method="GET" action="/book/{title}">
                         <button class="btn btn-primary" type="submit">dodaj</button>
@@ -54,7 +54,6 @@
         </table>
     </div>
 </div>
-
 </body>
 
 </html>
