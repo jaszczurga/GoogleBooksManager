@@ -34,6 +34,7 @@
                     <img src="{{$book["volumeInfo"]["imageLinks"]["thumbnail"]}}">
                     <p>autor: {{$book["volumeInfo"]["authors"][0]}}</p>
                     <p>{{$book["volumeInfo"]["title"]}}</p>
+                    <p>{{$book["id"]}}</p>
                     <p class="card-text"></p>
                 </div>
             </div>

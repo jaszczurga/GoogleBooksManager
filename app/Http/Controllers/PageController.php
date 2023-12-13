@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Books;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -64,19 +65,27 @@ class PageController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store($id)
     {
-        $this->validate($request, [
-            'nazwa' => 'required'
-        ]);
+        Log::info($id);
+        $response = Http::get('https://www.googleapis.com/books/v1/volumes?q='.$id);
+        $result = $response->json()['items'][0];
+        foreach ($response->json()['items'] as $b) {
+            if ($b['id'] == $id) {
+                $result = $b;
+            }
+        }
+
 
         // Stworzenie celu
-        $cel = new Books;
-        $cel->tytul = $request->input('nazwa');
-        $cel->autor = $request->input('tresc');
+        Log::info($response->json()['items']);
+        $book = new Books;
+        $book->book_id = $result['id'];
+        $book->tytul = $result['volumeInfo']['title'];
+        $book->autor = $result['volumeInfo']['authors'][0];
 
 
-        $cel->save();
+        $book->save();
 
         return redirect('/')->with('success', 'Cel dodany!');
     }
