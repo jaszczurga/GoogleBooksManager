@@ -159,4 +159,13 @@ class PageController extends Controller
         // var_dump($cele);
         return view('MyBooks')->with('books', $books);
     }
+
+    public function editBook($id)
+    {
+        $book = Books::find($id);
+        Log::info($book);
+        return view('MyBooksEdit')->with('book', $book);
+    }
+
+
 }

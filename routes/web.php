@@ -26,4 +26,5 @@ Route::get('/search', [PageController::class, 'search'])->name('search');
 Route::get('/books/{id}', [PageController::class, 'store'])->name('store');
 Route::get('/books/{id}/edit', [PageController::class, 'edit'])->name('edit');
 Route::delete('/books/{id}', [App\Http\Controllers\PageController::class, 'delete']);
+Route::get("/myBooks/edit/{id}",[PageController::class,'editBook'])->name('editBook');
 
