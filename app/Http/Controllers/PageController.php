@@ -99,6 +99,14 @@ class PageController extends Controller
         // Check if data exists in cache
         if (Cache::has($cacheKey)) {
             $bookData = Cache::get($cacheKey);
+
+            //check is image exist
+            if (isset($bookData['volumeInfo']['imageLinks']['thumbnail'])) {
+                $bookData['volumeInfo']['imageLinks']['thumbnail'] = str_replace('&edge=curl', '', $bookData['volumeInfo']['imageLinks']['thumbnail']);
+            } else {
+                $bookData['volumeInfo']['imageLinks']['thumbnail'] = 'https://via.placeholder.com/128x192.png?text=No+Image';
+            }
+            Log::info($bookData);
             return view('edit')->with('book', $bookData);
         } else {
             $response = Http::get('https://www.googleapis.com/books/v1/volumes?q=' . urlencode($id));
@@ -116,6 +124,14 @@ class PageController extends Controller
 //                        // Store book details in the database
 //                        $this->storeBookDetails($bookData);
 //                        break;
+                        //check is image exist
+                        if (isset($bookData['volumeInfo']['imageLinks']['thumbnail'])) {
+                            $bookData['volumeInfo']['imageLinks']['thumbnail'] = str_replace('&edge=curl', '', $bookData['volumeInfo']['imageLinks']['thumbnail']);
+                        } else {
+                            $bookData['volumeInfo']['imageLinks']['thumbnail'] = 'https://via.placeholder.com/128x192.png?text=No+Image';
+                        }
+                        Log::info('Showing user profile for user: ' . $bookData[0]);
+
                         return view('edit')->with('book', $bookData);
                     }
                 }
