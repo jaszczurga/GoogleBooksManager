@@ -132,7 +132,6 @@ class PageController extends Controller
                         } else {
                             $bookData['volumeInfo']['imageLinks']['thumbnail'] = 'https://via.placeholder.com/128x192.png?text=No+Image';
                         }
-                        Log::info('Showing user profile for user: ' . $bookData[0]);
 
                         return view('edit')->with('book', $bookData);
                     }
@@ -175,7 +174,7 @@ class PageController extends Controller
         $book->opis = $request->input('opis');
         $book->save();
 
-        return redirect('/')->with('success', 'Cel zaktualizowany!');
+        return redirect('/myBooks')->with('success', 'Cel zaktualizowany!');
     }
 
 

@@ -39,7 +39,7 @@
 {{--            <h1>notatka</h1><textarea style="width: 95%;height: 50%;--bs-body-bg: #6f6b6b;">{{$book["opis"]}}}</textarea>--}}
             <form
                 method="POST"
-                action="/mybooks/update/{{$book["id"]}}">
+                action="/myBooks/update/{{$book["id"]}}">
 {{--                onsubmit="return confirm('Do you really want to delete?');">--}}
                 {!! csrf_field() !!}
                 <input
@@ -49,7 +49,7 @@
                 <h1>notatka</h1><textarea name="opis"  style="width: 95%;height: 50%;--bs-body-bg: #6f6b6b;">{{$book["opis"]}}}</textarea>
                 <button
                     type="submit"
-                    class="btn btn-danger">Delete</button>
+                    class="btn btn-danger" >zapisz</button>
             </form>
         </div>
     </div>
