@@ -88,6 +88,8 @@ class PageController extends Controller
         $book->book_id = $bookData['id'];
         $book->tytul = $bookData['volumeInfo']['title'];
         $book->autor = $bookData['volumeInfo']['authors'][0];
+        $book->img = $bookData['volumeInfo']['imageLinks']['thumbnail'];
+        $book->opis = $bookData['volumeInfo']['description']="Brak opisu";
 
         $book->save();
     }
@@ -165,6 +167,15 @@ class PageController extends Controller
         $book = Books::find($id);
         Log::info($book);
         return view('MyBooksEdit')->with('book', $book);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $book = Books::find($id);
+        $book->opis = $request->input('opis');
+        $book->save();
+
+        return redirect('/')->with('success', 'Cel zaktualizowany!');
     }
 
 

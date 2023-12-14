@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('book_id');
             $table->string('tytul');
             $table->string('autor');
+            $table->string('img');
+            $table->string('opis');
             $table->timestamps();
         });
     }
