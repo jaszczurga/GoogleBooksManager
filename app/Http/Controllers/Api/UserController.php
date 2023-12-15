@@ -37,13 +37,14 @@ class UserController extends Controller
                 'password' => Hash::make($request->password)
             ]);
 
-//            return response()->json([
-//                'status' => true,
-//                'message' => 'User Created Successfully',
-//                'token' => $user->createToken("API TOKEN")->plainTextToken
-//            ], 200);
-            $user->createToken("API TOKEN")->plainTextToken;
-            return redirect('/');
+            $result =  response()->json([
+                'status' => true,
+                'message' => 'User Created Successfully',
+                'token' => $user->createToken("API TOKEN")->plainTextToken
+            ], 200);
+
+//            $user->createToken("API TOKEN")->plainTextToken;
+            return redirect('/')->with('result', $result);
 
 
         } catch (\Throwable $th) {
@@ -79,14 +80,14 @@ class UserController extends Controller
             }
 
             $user = User::where('email', $request->email)->first();
-            $user->createToken("TOKEN")->plainTextToken;
+//            $user->createToken("TOKEN")->plainTextToken;
 
-//            return response()->json([
-//                'status' => true,
-//                'message' => 'User Logged In Successfully',
-//                'token' => $user->createToken("API TOKEN")->plainTextToken
-//            ], 200);
-             return redirect('/')->with('success', 'Book data retrieved successfully!');
+            $result =  response()->json([
+                'status' => true,
+                'message' => 'User Logged In Successfully',
+                'token' => $user->createToken("API TOKEN")->plainTextToken
+            ], 200);
+             return redirect('/')->with('result', $result);
 
         } catch (\Throwable $th) {
             return response()->json([
@@ -100,12 +101,13 @@ class UserController extends Controller
     public function logout()
     {
         try {
-            auth()->user()->currentAccessToken()->delete();
-//            return response()->json([
-//                'status' => true,
-//                'message' => 'User Logged Out Successfully',
-//            ], 200);
-            return redirect('/login')->with('success', 'Book data retrieved successfully!');
+//            auth()->user()->currentAccessToken()->delete();
+            Auth::guard('web')->logout();
+            $result =  response()->json([
+                'status' => true,
+                'message' => 'User Logged Out Successfully',
+            ], 200);
+            return redirect('/login')->with('result', $result);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
