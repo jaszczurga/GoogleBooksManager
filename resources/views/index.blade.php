@@ -20,6 +20,8 @@
 <div class="container">
     <div class="col-xxl-12 offset-xxl-0">
         <h1 style="text-align: center;">wybierz ksiazke</h1>
+        <br>
+        <p>Witaj {{$userName}}</p>
         <form method="GET" action="/search">
         <div class="row">
             <div class="col-xxl-2 offset-xxl-5"><input name="query" type="search" style="padding-bottom: 0px;margin-bottom: 45px;padding-top: 0px;margin-top: 24px;"></div>

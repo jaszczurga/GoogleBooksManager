@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Books;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -15,6 +16,7 @@ class PageController extends Controller
     private $query = 'python';
 
     public function index(){
+        $userName = Auth::user()->name;
         $cacheKey = 'books_query_' . $this->query;
 
         // Check if data exists in cache
@@ -32,7 +34,8 @@ class PageController extends Controller
             }
         }
 
-        return view('index')->with('books', $this->books);
+       // return view('index')->with('books', $this->books);
+        return view('index')->with(['books' => $this->books, 'userName' => $userName]);
     }
 
     public function search(Request $request){
