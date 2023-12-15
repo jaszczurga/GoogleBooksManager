@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\PageController;
+use http\Client\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 //This name can be used to generate a URL to this route
 
 //strona glowna
-Route::get("/",[PageController::class,'index'])->name('index');
+//Route::get("/",[PageController::class,'index'])->name('index');
 
 //strona z lista ksiazek uzytkownika zapisanych w bazie danych
 Route::get("/myBooks",[PageController::class,'show'])->name('show');
@@ -44,4 +46,12 @@ Route::get("/myBooks/edit/{id}",[PageController::class,'editBook'])->name('editB
 
 //routing zapewniajacy zapisanie notatki do bazy danych
 Route::put("/myBooks/update/{id}",[PageController::class,'update'])->name('update');
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get("/",[PageController::class,'index'])->name('index');
+});
+
+
+
+
 
