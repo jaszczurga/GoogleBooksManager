@@ -99,4 +99,22 @@ class UserController extends Controller
             ], 500);
         }
     }
+
+    //logout method
+    public function logout(Request $request)
+    {
+        try {
+            auth()->user()->currentAccessToken()->delete();
+            return response()->json([
+                'status' => true,
+                'message' => 'User Logged Out Successfully',
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
 }

@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 //This name can be used to generate a URL to this route
 
 //strona glowna
-//Route::get("/",[PageController::class,'index'])->name('index');
+//Route::get("/",[PageController::class,'index'])->name('index')->middleware('auth:sanctum');
 
 //strona z lista ksiazek uzytkownika zapisanych w bazie danych
 Route::get("/myBooks",[PageController::class,'show'])->name('show');
@@ -50,6 +50,9 @@ Route::put("/myBooks/update/{id}",[PageController::class,'update'])->name('updat
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get("/",[PageController::class,'index'])->name('index');
 });
+
+//Route::post('auth/register', [UserController::class, 'createUser']);
+//Route::post('auth/login', [UserController::class, 'loginUser']);
 
 
 

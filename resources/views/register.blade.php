@@ -25,6 +25,7 @@
                             </svg></div>
                         <form class="text-center" method="post">
                             <div class="mb-3"><input class="form-control" type="email" name="email" placeholder="Email"></div>
+                            <div class="mb-3"><input class="form-control" type="text" name="name" placeholder="Name"></div>
                             <div class="mb-3"><input class="form-control" type="password" name="password" placeholder="Password"></div>
                             <div class="mb-3"><button class="btn btn-primary d-block w-100" type="submit">Login</button></div>
                             <p class="text-muted">Forgot your password?</p>
