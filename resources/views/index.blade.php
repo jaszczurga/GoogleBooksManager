@@ -30,6 +30,12 @@
         <a href="/myBooks">
             <button class="btn btn-primary" type="submit" style="background-color: green;">moje</button>
         </a>
+        <br>
+        <br>
+        <form method="POST" action="/auth/logout">
+            @csrf <!-- Include CSRF token for Laravel -->
+            <button type="submit">Logout</button>
+        </form>
     </div>
 </div>
 <div class="col-xxl-6 offset-xxl-3">

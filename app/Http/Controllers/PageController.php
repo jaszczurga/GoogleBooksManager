@@ -177,5 +177,15 @@ class PageController extends Controller
         return redirect('/myBooks')->with('success', 'Cel zaktualizowany!');
     }
 
+    public function login()
+    {
+        return view('login');
+    }
+
+    public function register()
+    {
+        return view('register');
+    }
+
 
 }
