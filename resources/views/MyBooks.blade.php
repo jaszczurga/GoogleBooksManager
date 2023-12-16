@@ -42,7 +42,7 @@
             <tr>
 {{--                //stara wersja edit tylko dla ksiazek z ze listy glownej nie moich--}}
 {{--                <td style="width: 30%;border-width: 3px;border-color: var(--bs-table-color);">  <a href="/books/{{$book["book_id"]}}/edit">{{ucfirst($book["tytul"])}}</a></td>--}}
-                <td style="width: 30%;border-width: 3px;border-color: var(--bs-table-color);">  <a href="/myBooks/edit/{{$book["id"]}}">{{ucfirst($book["tytul"])}}</a></td>
+                <td style="width: 30%;border-width: 3px;border-color: var(--bs-table-color);">  <a href="/myBooks/myBooksDetails/{{$book["id"]}}">{{ucfirst($book["tytul"])}}</a></td>
                 <td style="width: 30%;border-width: 3px;border-color: var(--bs-table-color);">
                     <form
                         method="POST"

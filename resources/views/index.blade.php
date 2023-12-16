@@ -52,7 +52,7 @@
             <tbody>
             @foreach($books as $book)
             <tr>
-                <td style="width: 30%;border-width: 3px;border-color: var(--bs-table-color);">  <a href="/books/{{$book["id"]}}/edit">{{ucfirst($book["volumeInfo"]["title"])}}</a></td>
+                <td style="width: 30%;border-width: 3px;border-color: var(--bs-table-color);">  <a href="/books/{{$book["id"]}}/bookDetails">{{ucfirst($book["volumeInfo"]["title"])}}</a></td>
                 <td style="width: 30%;border-width: 3px;border-color: var(--bs-table-color);">
                         <a href="/books/{{$book["id"]}}"><button class="btn btn-primary" type="submit">dodaj</button></a>
 

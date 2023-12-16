@@ -200,7 +200,7 @@ class PageController extends Controller
         $book = Books::find($id);
 
         if ($book && $book->user_id == $user->id) {
-            return view('MyBooksEdit')->with('book', $book);
+            return view('myBooksDetails')->with('book', $book);
         } else {
             return redirect('/myBooks')->with('error', 'Nie masz uprawnień do edycji tego celu!');
         }
