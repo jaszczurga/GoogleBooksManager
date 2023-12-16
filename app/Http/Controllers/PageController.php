@@ -170,29 +170,42 @@ class PageController extends Controller
         // var_dump($cele);
         return view('MyBooks')->with('books', $userBooks);
     }
+//wersja z cachowaniem
+//    public function editBook($id)
+//    {
+//        $user = Auth::user();
+//        if (Cache::has($id)) {
+//            //if user_id is the same as logged user
+//            $book = Cache::get($id);
+//            if ($book->user_id == $user->id) {
+//                return view('MyBooksEdit')->with('book', $book);
+//            }else {
+//                return redirect('/myBooks')->with('error', 'Nie masz uprawnień do edycji tego celu!');
+//            }
+//        }else {
+//                $book = Books::find($id);
+//                if ($book->user_id == $user->id) {
+//                    Cache::put($id, $book, now()->addMinutes(60));
+//                    return view('MyBooksEdit')->with('book', $book);
+//                }
+//                else {
+//                    return redirect('/myBooks')->with('error', 'Nie masz uprawnień do edycji tego celu!');
+//                }
+//            }
+//    }
 
     public function editBook($id)
     {
         $user = Auth::user();
-        if (Cache::has($id)) {
-            //if user_id is the same as logged user
-            $book = Cache::get($id);
-            if ($book->user_id == $user->id) {
-                return view('MyBooksEdit')->with('book', $book);
-            }else {
-                return redirect('/myBooks')->with('error', 'Nie masz uprawnień do edycji tego celu!');
-            }
-        }else {
-                $book = Books::find($id);
-                if ($book->user_id == $user->id) {
-                    Cache::put($id, $book, now()->addMinutes(60));
-                    return view('MyBooksEdit')->with('book', $book);
-                }
-                else {
-                    return redirect('/myBooks')->with('error', 'Nie masz uprawnień do edycji tego celu!');
-                }
-            }
+        $book = Books::find($id);
+
+        if ($book && $book->user_id == $user->id) {
+            return view('MyBooksEdit')->with('book', $book);
+        } else {
+            return redirect('/myBooks')->with('error', 'Nie masz uprawnień do edycji tego celu!');
+        }
     }
+
 
     public function update(Request $request, $id)
     {

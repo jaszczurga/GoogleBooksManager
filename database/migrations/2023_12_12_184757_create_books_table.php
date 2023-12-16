@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('tytul');
             $table->string('autor');
             $table->string('img');
-            $table->string('opis');
+            $table->text('opis');
             $table->string('user_id');
             $table->timestamps();
         });
