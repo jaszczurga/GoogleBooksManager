@@ -39,6 +39,7 @@ class PageController extends Controller
     }
 
     public function search(Request $request){
+        $userName = Auth::user()->name;
         $query = $request->input('query');
         $cacheKey = 'books_query_' . $query;
 
@@ -55,7 +56,8 @@ class PageController extends Controller
             }
         }
 
-        return view('index')->with('books', $this->books);
+//        return view('index')->with('books', $this->books);
+        return view('index')->with(['books' => $this->books, 'userName' => $userName]);
     }
 
     public function store($id)
@@ -88,11 +90,13 @@ class PageController extends Controller
     private function storeBookDetails($bookData)
     {
         $book = new Books;
+        $user = Auth::user();
         $book->book_id = $bookData['id'];
         $book->tytul = $bookData['volumeInfo']['title'];
         $book->autor = $bookData['volumeInfo']['authors'][0];
         $book->img = $bookData['volumeInfo']['imageLinks']['thumbnail'];
         $book->opis = $bookData['volumeInfo']['description']="Brak opisu";
+        $book->user_id = $user->id;
 
         $book->save();
     }
@@ -158,17 +162,36 @@ class PageController extends Controller
 
     public function show()
     {
+        $user = Auth::user();
         $books = Books::all();
+        $userBooks = Books::where('user_id', $user->id)->get();
+        Log::info($books);
         Log::info('Showing user profile for user: '.$books);
         // var_dump($cele);
-        return view('MyBooks')->with('books', $books);
+        return view('MyBooks')->with('books', $userBooks);
     }
 
     public function editBook($id)
     {
-        $book = Books::find($id);
-        Log::info($book);
-        return view('MyBooksEdit')->with('book', $book);
+        $user = Auth::user();
+        if (Cache::has($id)) {
+            //if user_id is the same as logged user
+            $book = Cache::get($id);
+            if ($book->user_id == $user->id) {
+                return view('MyBooksEdit')->with('book', $book);
+            }else {
+                return redirect('/myBooks')->with('error', 'Nie masz uprawnień do edycji tego celu!');
+            }
+        }else {
+                $book = Books::find($id);
+                if ($book->user_id == $user->id) {
+                    Cache::put($id, $book, now()->addMinutes(60));
+                    return view('MyBooksEdit')->with('book', $book);
+                }
+                else {
+                    return redirect('/myBooks')->with('error', 'Nie masz uprawnień do edycji tego celu!');
+                }
+            }
     }
 
     public function update(Request $request, $id)

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('autor');
             $table->string('img');
             $table->string('opis');
+            $table->string('user_id');
             $table->timestamps();
         });
     }

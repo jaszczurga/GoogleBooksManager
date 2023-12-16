@@ -40,7 +40,7 @@ class UserController extends Controller
             $result =  response()->json([
                 'status' => true,
                 'message' => 'User Created Successfully',
-                'token' => $user->createToken("API TOKEN")->plainTextToken
+              //  'token' => $user->createToken("API TOKEN")->plainTextToken
             ], 200);
 
 //            $user->createToken("API TOKEN")->plainTextToken;
@@ -85,7 +85,7 @@ class UserController extends Controller
             $result =  response()->json([
                 'status' => true,
                 'message' => 'User Logged In Successfully',
-                'token' => $user->createToken("API TOKEN")->plainTextToken
+              //  'token' => $user->createToken("API TOKEN")->plainTextToken
             ], 200);
              return redirect('/')->with('result', $result);
 
@@ -103,6 +103,7 @@ class UserController extends Controller
         try {
 //            auth()->user()->currentAccessToken()->delete();
             Auth::guard('web')->logout();
+          //  Auth::guard('sanctum')->user()->tokens()->delete();
             $result =  response()->json([
                 'status' => true,
                 'message' => 'User Logged Out Successfully',
