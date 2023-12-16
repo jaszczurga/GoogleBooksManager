@@ -28,13 +28,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/books/{id}', [PageController::class, 'store'])->name('store');
 
 //routing zapewnijacy otworzenie informacji o ksiazce ze strony glownej
-    Route::get('/books/{id}/edit', [PageController::class, 'edit'])->name('edit');
+    //Route::get('/books/{id}/edit', [PageController::class, 'edit'])->name('edit');
+    Route::get('/books/{id}/bookDetails', [PageController::class, 'bookDetails'])->name('bookDetails');
 
 //routing zapewniajacy usuniecie ksiazki o danym id
     Route::delete('/books/{id}', [App\Http\Controllers\PageController::class, 'delete']);
 
 // routing zapeniajacy otworzenie informacji o ksiazce ze strony zapisanych ksiazek uzytkownika w bazie danych w tym notatek jego
-    Route::get("/myBooks/edit/{id}",[PageController::class,'editBook'])->name('editBook');
+    //Route::get("/myBooks/edit/{id}",[PageController::class,'editBook'])->name('editBook');
+    Route::get("/myBooks/myBooksDetails/{id}",[PageController::class,'myBooksDetails'])->name('myBooksDetails');
 
 //routing zapewniajacy zapisanie notatki do bazy danych
     Route::put("/myBooks/update/{id}",[PageController::class,'update'])->name('update');

@@ -101,7 +101,7 @@ class PageController extends Controller
         $book->save();
     }
 
-    public function edit($id)
+    public function bookDetails($id)
     {
         $cacheKey = 'book_' . $id;
 
@@ -116,7 +116,7 @@ class PageController extends Controller
                 $bookData['volumeInfo']['imageLinks']['thumbnail'] = 'https://via.placeholder.com/128x192.png?text=No+Image';
             }
             Log::info($bookData);
-            return view('edit')->with('book', $bookData);
+            return view('bookDetails')->with('book', $bookData);
         } else {
             $response = Http::get('https://www.googleapis.com/books/v1/volumes?q=' . urlencode($id));
 
@@ -140,7 +140,7 @@ class PageController extends Controller
                             $bookData['volumeInfo']['imageLinks']['thumbnail'] = 'https://via.placeholder.com/128x192.png?text=No+Image';
                         }
 
-                        return view('edit')->with('book', $bookData);
+                        return view('bookDetails')->with('book', $bookData);
                     }
                 }
             } else {
@@ -194,7 +194,7 @@ class PageController extends Controller
 //            }
 //    }
 
-    public function editBook($id)
+    public function myBooksDetails($id)
     {
         $user = Auth::user();
         $book = Books::find($id);
