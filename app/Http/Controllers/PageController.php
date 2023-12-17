@@ -69,9 +69,7 @@ class PageController extends Controller
         // Check if data exists in cache
         if (Cache::has($cacheKey)) {
             $bookData = Cache::get($cacheKey);
-//            if ($book = Books::where('book_id', $bookData['id'])->first()) {
-//                return redirect('/')->with('error', 'Ta książka jest już zapisana w bazie danych.');
-//            }
+
             $this->storeBookDetails($bookData);
         } else {
             $response = Http::get('https://www.googleapis.com/books/v1/volumes?q=' . $id);
@@ -81,10 +79,6 @@ class PageController extends Controller
 
                 // Cache the book data for 60 minutes (adjust this as needed)
                 Cache::put($cacheKey, $bookData, now()->addMinutes(60));
-                //check if book_id exist in database
-//                if ($book = Books::where('book_id', $bookData['id'])->first()) {
-//                    return redirect('/')->with('error', 'Ta książka jest już zapisana w bazie danych.');
-//                }
                 // Store book details in the database
                 $this->storeBookDetails($bookData);
             } else {
@@ -97,6 +91,7 @@ class PageController extends Controller
 
     private function storeBookDetails($bookData)
     {
+        $bookData = $this->checkCorrect($bookData);
         $user = Auth::user();
         //check if in db exist book with this book_id
         if ($bookt = Books::where([
@@ -122,6 +117,25 @@ class PageController extends Controller
         $book->save();
     }
 
+    private function checkCorrect($bookData){
+        //check is image exist
+        if (isset($bookData['volumeInfo']['imageLinks']['thumbnail'])) {
+            $bookData['volumeInfo']['imageLinks']['thumbnail'] = str_replace('&edge=curl', '', $bookData['volumeInfo']['imageLinks']['thumbnail']);
+        } else {
+            $bookData['volumeInfo']['imageLinks']['thumbnail'] = 'https://via.placeholder.com/128x192.png?text=No+Image';
+        }
+        //check if description exist
+        if (!(isset($bookData['volumeInfo']['description'])) ){
+            $bookData['volumeInfo']['description'] = 'Brak opisu';
+        }
+
+        //check if author exist
+        if (!(isset($bookData['volumeInfo']['authors'][0])) ){
+            $bookData['volumeInfo']['authors'][0] = 'Brak autora';
+        }
+        return $bookData;
+    }
+
     public function bookDetails($id)
     {
         $cacheKey = 'book_' . $id;
@@ -129,14 +143,7 @@ class PageController extends Controller
         // Check if data exists in cache
         if (Cache::has($cacheKey)) {
             $bookData = Cache::get($cacheKey);
-
-            //check is image exist
-            if (isset($bookData['volumeInfo']['imageLinks']['thumbnail'])) {
-                $bookData['volumeInfo']['imageLinks']['thumbnail'] = str_replace('&edge=curl', '', $bookData['volumeInfo']['imageLinks']['thumbnail']);
-            } else {
-                $bookData['volumeInfo']['imageLinks']['thumbnail'] = 'https://via.placeholder.com/128x192.png?text=No+Image';
-            }
-            Log::info($bookData);
+            $bookData = $this->checkCorrect($bookData);
             return view('bookDetails')->with('book', $bookData);
         } else {
             $response = Http::get('https://www.googleapis.com/books/v1/volumes?q=' . urlencode($id));
@@ -150,16 +157,7 @@ class PageController extends Controller
 
                         // Cache the book data for 60 minutes (adjust this as needed)
                         Cache::put($cacheKey, $bookData, now()->addMinutes(60));
-//
-//                        // Store book details in the database
-//                        $this->storeBookDetails($bookData);
-//                        break;
-                        //check is image exist
-                        if (isset($bookData['volumeInfo']['imageLinks']['thumbnail'])) {
-                            $bookData['volumeInfo']['imageLinks']['thumbnail'] = str_replace('&edge=curl', '', $bookData['volumeInfo']['imageLinks']['thumbnail']);
-                        } else {
-                            $bookData['volumeInfo']['imageLinks']['thumbnail'] = 'https://via.placeholder.com/128x192.png?text=No+Image';
-                        }
+                        $bookData = $this->checkCorrect($bookData);
 
                         return view('bookDetails')->with('book', $bookData);
                     }
@@ -168,8 +166,6 @@ class PageController extends Controller
                 return redirect('/')->with('error', 'Failed to fetch data from the API.');
             }
         }
-
-//        return view('edit')->with('book', $bookData);
     }
 
 
@@ -180,17 +176,6 @@ class PageController extends Controller
 
         return redirect('/myBooks')->with('success', 'Cel zniszczony');
     }
-//
-//    public function show()
-//    {
-//        $user = Auth::user();
-//        $books = Books::all();
-//        $userBooks = Books::where('user_id', $user->id)->get();
-//        Log::info($books);
-//        Log::info('Showing user profile for user: '.$books);
-//        // var_dump($cele);
-//        return view('MyBooks')->with('books', $userBooks);
-//    }
     public function show()
     {
         $user = Auth::user();
@@ -207,36 +192,10 @@ class PageController extends Controller
         }
 
         Log::info('Showing user profile for user: ' . $user->id);
-        // Log::info($userBooks); // Optionally log the user's books
-        // Log::info('Number of read books: ' . $readBooksCount); // Optionally log the count of read books
-        //($readBooksCount/$booksCount)*100
+
         return view('MyBooks')->with('books', $userBooks)
             ->with('readBooksCount', round(($readBooksCount/$booksCount)*100,0));
     }
-//wersja z cachowaniem
-//    public function editBook($id)
-//    {
-//        $user = Auth::user();
-//        if (Cache::has($id)) {
-//            //if user_id is the same as logged user
-//            $book = Cache::get($id);
-//            if ($book->user_id == $user->id) {
-//                return view('MyBooksEdit')->with('book', $book);
-//            }else {
-//                return redirect('/myBooks')->with('error', 'Nie masz uprawnień do edycji tego celu!');
-//            }
-//        }else {
-//                $book = Books::find($id);
-//                if ($book->user_id == $user->id) {
-//                    Cache::put($id, $book, now()->addMinutes(60));
-//                    return view('MyBooksEdit')->with('book', $book);
-//                }
-//                else {
-//                    return redirect('/myBooks')->with('error', 'Nie masz uprawnień do edycji tego celu!');
-//                }
-//            }
-//    }
-
     public function myBooksDetails($id)
     {
         $user = Auth::user();
