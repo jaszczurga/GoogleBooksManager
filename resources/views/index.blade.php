@@ -127,8 +127,17 @@
         </div>
     </div>
     <form method="GET" action="/search" class="search-form" style="width: 97%;">
-        <div class="input-group"><span class="input-group-text"><i class="fa fa-search"></i></span><input name="query" class="form-control" type="text" placeholder="I am looking for.."><button class="btn btn-light" type="submit">Search </button></div>
+        <div class="input-group"><span class="input-group-text"><i class="fa fa-search"></i></span><input name="query" class="form-control" type="text" placeholder="I am looking for.."><button class="btn btn-light" type="submit">Szukaj </button></div>
     </form>
+    @if($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach($errors->all() as  $error)
+                    <li>{{$error}}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="container">
         @foreach(array_chunk($books, 2) as $chunk)
             <div class="row gy-4">
