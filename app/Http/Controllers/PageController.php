@@ -97,15 +97,20 @@ class PageController extends Controller
 
     private function storeBookDetails($bookData)
     {
+        $user = Auth::user();
         //check if in db exist book with this book_id
-        if ($book = Books::where('book_id', $bookData['id'])->first()) {
+        if ($bookt = Books::where([
+            ['book_id', $bookData['id']],
+            ['user_id', $user->id],
+        ])->first()) {
+            // Book with the specified book_id and user_id exists
             $errors = ['Ta ksiazka jest juz zapisana w bazie danych.'];
             return redirect('/')->withErrors($errors);
         }
 
 
+
         $book = new Books;
-        $user = Auth::user();
         $book->book_id = $bookData['id'];
         $book->tytul = $bookData['volumeInfo']['title'];
         $book->autor = $bookData['volumeInfo']['authors'][0];
