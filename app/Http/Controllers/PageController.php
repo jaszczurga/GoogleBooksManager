@@ -52,7 +52,8 @@ class PageController extends Controller
                 $this->books = $response->json()['items'];
                 Cache::put($cacheKey, $this->books, now()->addMinutes(60));
             } else {
-                return "Failed to fetch data from the API.";
+                $errors = ['wpisz ksiazke ktora chcesz wyszukac'];
+                return redirect('/')->withErrors($errors);
             }
         }
 

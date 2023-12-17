@@ -126,7 +126,7 @@
             <p class="w-lg-50"></p>
         </div>
     </div>
-    <form method="GET" action="/search" class="search-form" style="width: 97%;">
+    <form method="GET" action="/search" class="search-form" style="width: 100%;">
         <div class="input-group"><span class="input-group-text"><i class="fa fa-search"></i></span><input name="query" class="form-control" type="text" placeholder="I am looking for.."><button class="btn btn-light" type="submit">Szukaj </button></div>
     </form>
     @if($errors->any())
