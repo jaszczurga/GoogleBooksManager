@@ -84,6 +84,15 @@
                             <div class="mb-3"><button class="btn btn-primary d-block w-100" type="submit">Login</button></div>
                             <a href="/register"><p class="text-muted">register</p></a>
                         </form>
+                        @if($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach($errors->all() as  $error)
+                                        <li>{{$error}}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use function Laravel\Prompts\error;
 
 class UserController extends Controller
 {
@@ -24,11 +25,12 @@ class UserController extends Controller
                 ]);
 
             if($validateUser->fails()){
-                return response()->json([
-                    'status' => false,
-                    'message' => 'validation error',
-                    'errors' => $validateUser->errors()
-                ], 401);
+//                return response()->json([
+//                    'status' => false,
+//                    'message' => 'validation error',
+//                    'errors' => $validateUser->errors()
+//                ], 401);
+                return redirect('/register')->with('errors', $validateUser->errors());
             }
 
             $user = User::create([
@@ -65,18 +67,21 @@ class UserController extends Controller
                 ]);
 
             if($validateUser->fails()){
-                return response()->json([
-                    'status' => false,
-                    'message' => 'validation error',
-                    'errors' => $validateUser->errors()
-                ], 401);
+//                return response()->json([
+//                    'status' => false,
+//                    'message' => 'not correct email or password',
+//                    'errors' => $validateUser->errors()
+//                ], 401);
+                return redirect('/login')->with('errors', $validateUser->errors());
             }
 
             if(!Auth::attempt($request->only(['email', 'password']))){
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Email & Password does not match with our record.',
-                ], 401);
+//                return response()->json([
+//                    'status' => false,
+//                    'message' => 'Email & Password does not match with our record.',
+//                ], 401);
+                $errors = ['Email or Password do not match our records.'];
+                return redirect('/login')->withErrors($errors);
             }
 
             $user = User::where('email', $request->email)->first();
