@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('img');
             $table->text('opis');
             $table->string('user_id');
-            $table->boolean('przeczytana')->default(false);
+            $table->string('przeczytana')->default("nie");
             $table->timestamps();
         });
     }

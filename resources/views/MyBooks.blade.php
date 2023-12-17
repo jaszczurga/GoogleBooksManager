@@ -127,21 +127,25 @@
     </div>
     <p></p>
     <div class="progress">
-        <div class="progress-bar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%;">80%</div>
+        <div class="progress-bar" role="progressbar" style="width: {{ $readBooksCount }}%;" aria-valuenow="{{ $readBooksCount }}" aria-valuemin="0" aria-valuemax="100">
+            {{ $readBooksCount }}%
+        </div>
     </div>
     <form class="search-form" style="width: 97%;">
         <div class="input-group"></div>
     </form>
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="formCheck-1" onchange="filterBooks()">
-        <label class="form-check-label" for="formCheck-1">Show Read Books</label>
+        <input class="form-check-input" type="checkbox" id="formCheck-1" onchange="filterBooks()" checked>
+        <label class="form-check-label" for="formCheck-1">pokaz tylko nieprzeczytane ksiazki</label>
+        <p></p>
     </div>
-
+    <br>
+    <br>
     <div class="container" id="bookContainer">
         @foreach(collect($books)->chunk(2) as $chunk)
             <div class="row gy-4">
                 @foreach($chunk as $book)
-                    <div class="col-md-6" data-read="{{ $book['przeczytane'] ? 'true' : 'false' }}">
+                    <div class="col-md-6" data-read="{{ $book['przeczytana']}}">
                         <div class="card text-center">
                             <div class="card-body">
                                 @if(isset($book['img']))
@@ -187,59 +191,16 @@
             const books = document.querySelectorAll('#bookContainer .col-md-6');
 
             books.forEach(book => {
-                const isRead = book.getAttribute('data-read') === 'true';
-
-                if (checkbox.checked && !isRead) {
+                const isRead = book.getAttribute('data-read') === 'tak';
+                console.log(book.getAttribute('data-read'));
+                if (!(checkbox.checked && !isRead)) {
                     book.style.display = 'none'; // Hide unread books
-                } else {
-                    book.style.display = 'block'; // Show all books
+                }else {
+                    book.style.display = 'block'; // Show unread books
                 }
             });
         }
     </script>
-
-    {{--    <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1">wszystkie</label></div>--}}
-{{--    <div class="container">--}}
-{{--        @foreach(collect($books)->chunk(2) as $chunk)--}}
-{{--            <div class="row gy-4">--}}
-{{--                @foreach($chunk as $book)--}}
-{{--                    <div class="col-md-6">--}}
-{{--                        <div class="card text-center">--}}
-{{--                            <div class="card-body">--}}
-{{--                                @if(isset($book['img']))--}}
-{{--                                    @php--}}
-{{--                                        $imageSrc = $book['img'];--}}
-{{--                                    @endphp--}}
-{{--                                    <img class="rounded img-fluid d-block mx-auto mb-3" src="{{ $imageSrc }}" style="width: 200px; height: 300px;" alt="{{ $book['autor'] }}">--}}
-{{--                                @else--}}
-{{--                                    <img class="rounded img-fluid d-block mx-auto mb-3" src="https://via.placeholder.com/128x192.png?text=No+Image" style="width: 200px; height: 300px;" alt="Placeholder Image">--}}
-{{--                                @endif--}}
-
-{{--                                @if(isset($book["tytul"]))--}}
-{{--                                    <h5 class="card-title">{{ $book["tytul"] }}</h5>--}}
-{{--                                @endif--}}
-
-{{--                                @if(isset($book['autor']))--}}
-{{--                                    <p class="card-text">Author: {{ $book['autor'] }}</p>--}}
-{{--                                @else--}}
-{{--                                    <p class="card-text">Author: Brak informacji</p>--}}
-{{--                                @endif--}}
-
-{{--                                <div class="d-grid gap-2">--}}
-{{--                                    <form method="POST" action="/books/{{ $book['id'] }}" onsubmit="return confirm('Do you really want to delete?');">--}}
-{{--                                        @csrf--}}
-{{--                                        @method('DELETE')--}}
-{{--                                        <button class="btn btn-primary" type="submit" style="background: rgb(253,42,13);">Usuń</button>--}}
-{{--                                    </form>--}}
-{{--                                    <a href="/myBooks/myBooksDetails/{{$book["id"]}}"><button class="btn btn-primary" type="button" style="margin-top: 12px;background: rgb(18,167,167);">more</button></a>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                @endforeach--}}
-{{--            </div>--}}
-{{--        @endforeach--}}
-{{--    </div>--}}
 
 
     <footer class="text-center">

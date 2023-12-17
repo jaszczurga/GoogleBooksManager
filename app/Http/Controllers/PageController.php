@@ -62,11 +62,15 @@ class PageController extends Controller
 
     public function store($id)
     {
+        $userName = Auth::user()->name;
         $cacheKey = 'book_' . $id;
 
         // Check if data exists in cache
         if (Cache::has($cacheKey)) {
             $bookData = Cache::get($cacheKey);
+//            if ($book = Books::where('book_id', $bookData['id'])->first()) {
+//                return redirect('/')->with('error', 'Ta książka jest już zapisana w bazie danych.');
+//            }
             $this->storeBookDetails($bookData);
         } else {
             $response = Http::get('https://www.googleapis.com/books/v1/volumes?q=' . $id);
@@ -76,7 +80,10 @@ class PageController extends Controller
 
                 // Cache the book data for 60 minutes (adjust this as needed)
                 Cache::put($cacheKey, $bookData, now()->addMinutes(60));
-
+                //check if book_id exist in database
+//                if ($book = Books::where('book_id', $bookData['id'])->first()) {
+//                    return redirect('/')->with('error', 'Ta książka jest już zapisana w bazie danych.');
+//                }
                 // Store book details in the database
                 $this->storeBookDetails($bookData);
             } else {
@@ -97,6 +104,7 @@ class PageController extends Controller
         $book->img = $bookData['volumeInfo']['imageLinks']['thumbnail'];
         $book->opis = $bookData['volumeInfo']['description']="Brak opisu";
         $book->user_id = $user->id;
+        $book->przeczytana = "nie";
 
         $book->save();
     }
@@ -159,16 +167,38 @@ class PageController extends Controller
 
         return redirect('/myBooks')->with('success', 'Cel zniszczony');
     }
-
+//
+//    public function show()
+//    {
+//        $user = Auth::user();
+//        $books = Books::all();
+//        $userBooks = Books::where('user_id', $user->id)->get();
+//        Log::info($books);
+//        Log::info('Showing user profile for user: '.$books);
+//        // var_dump($cele);
+//        return view('MyBooks')->with('books', $userBooks);
+//    }
     public function show()
     {
         $user = Auth::user();
-        $books = Books::all();
+
+        // Retrieve all books associated with the user
         $userBooks = Books::where('user_id', $user->id)->get();
-        Log::info($books);
-        Log::info('Showing user profile for user: '.$books);
-        // var_dump($cele);
-        return view('MyBooks')->with('books', $userBooks);
+
+        // Count the number of books that are marked as read (where przeczytane is true)
+        $readBooksCount = $userBooks->where('przeczytana', 'tak')->count();
+        // count number of books
+        $booksCount = $userBooks->count();
+        if($booksCount==0){
+            $booksCount=1;
+        }
+
+        Log::info('Showing user profile for user: ' . $user->id);
+        // Log::info($userBooks); // Optionally log the user's books
+        // Log::info('Number of read books: ' . $readBooksCount); // Optionally log the count of read books
+        //($readBooksCount/$booksCount)*100
+        return view('MyBooks')->with('books', $userBooks)
+            ->with('readBooksCount', ($readBooksCount/$booksCount)*100);
     }
 //wersja z cachowaniem
 //    public function editBook($id)
