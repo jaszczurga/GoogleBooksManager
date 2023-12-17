@@ -17,9 +17,10 @@ return new class extends Migration
             $table->string('tytul');
             $table->string('autor');
             $table->string('img');
-            $table->text('opis');
+            $table->text('notatka');
             $table->string('user_id');
             $table->string('przeczytana')->default("nie");
+            $table->text('opis');
             $table->timestamps();
         });
     }

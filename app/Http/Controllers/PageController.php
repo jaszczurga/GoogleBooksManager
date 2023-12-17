@@ -102,10 +102,10 @@ class PageController extends Controller
         $book->tytul = $bookData['volumeInfo']['title'];
         $book->autor = $bookData['volumeInfo']['authors'][0];
         $book->img = $bookData['volumeInfo']['imageLinks']['thumbnail'];
-        $book->opis = $bookData['volumeInfo']['description']="Brak opisu";
+        $book->notatka ="Brak notatki";
         $book->user_id = $user->id;
         $book->przeczytana = "nie";
-
+        $book->opis =  $bookData['volumeInfo']['description'];
         $book->save();
     }
 
@@ -198,7 +198,7 @@ class PageController extends Controller
         // Log::info('Number of read books: ' . $readBooksCount); // Optionally log the count of read books
         //($readBooksCount/$booksCount)*100
         return view('MyBooks')->with('books', $userBooks)
-            ->with('readBooksCount', ($readBooksCount/$booksCount)*100);
+            ->with('readBooksCount', round(($readBooksCount/$booksCount)*100,0));
     }
 //wersja z cachowaniem
 //    public function editBook($id)
@@ -240,10 +240,23 @@ class PageController extends Controller
     public function update(Request $request, $id)
     {
         $book = Books::find($id);
-        $book->opis = $request->input('opis');
+        $book->notatka = $request->input('notatka');
         $book->save();
 
         return redirect('/myBooks')->with('success', 'Cel zaktualizowany!');
+    }
+
+    public function updateRead( $id)
+    {
+        $book = Books::find($id);
+        if($book->przeczytana=="nie"){
+            $book->przeczytana = "tak";
+        }else{
+            $book->przeczytana = "nie";
+        }
+        $book->save();
+
+        return redirect('/myBooks/myBooksDetails/'.$id)->with('success', 'Cel zaktualizowany!');
     }
 
     public function login()

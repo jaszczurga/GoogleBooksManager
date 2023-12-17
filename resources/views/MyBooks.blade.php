@@ -88,6 +88,10 @@
     <link href="{{ asset('css/Overlay-Login-Form.css') }}" rel="stylesheet">
     <link href="{{ asset('css/Footer-Basic-icons.css') }}" rel="stylesheet">
     <link href="{{ asset('css/Pretty-Search-Form.css') }}" rel="stylesheet">
+    <!-- Your existing HTML content -->
+
+    <!-- JavaScript code -->
+
 </head>
 
 <body>
@@ -135,8 +139,8 @@
         <div class="input-group"></div>
     </form>
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="formCheck-1" onchange="filterBooks()" checked>
-        <label class="form-check-label" for="formCheck-1">pokaz tylko nieprzeczytane ksiazki</label>
+        <input class="form-check-input" type="checkbox" id="formCheck-1">
+        <label class="form-check-label" for="formCheck-1">Pokaż przeczytane książki</label>
         <p></p>
     </div>
     <br>
@@ -145,7 +149,7 @@
         @foreach(collect($books)->chunk(2) as $chunk)
             <div class="row gy-4">
                 @foreach($chunk as $book)
-                    <div class="col-md-6" data-read="{{ $book['przeczytana']}}">
+                    <div class="col-md-6 book-card" data-read="{{ $book['przeczytana'] }}">
                         <div class="card text-center">
                             <div class="card-body">
                                 @if(isset($book['img']))
@@ -173,36 +177,21 @@
                                         @method('DELETE')
                                         <button class="btn btn-primary" type="submit" style="background: rgb(253,42,13);">Usuń</button>
                                     </form>
+                                        <?php
+                                        $buttonColor = ($book['przeczytana'] === 'tak') ? 'green' : 'blue';
+                                        ?>
                                     <a href="/myBooks/myBooksDetails/{{$book["id"]}}">
-                                        <button class="btn btn-primary" type="button" style="margin-top: 12px;background: rgb(18,167,167);">more</button>
+                                        <button class="btn btn-primary" type="button" style="margin-top: 12px;background: <?php echo $buttonColor; ?>;">Więcej</button>
                                     </a>
                                 </div>
                             </div>
                         </div>
+                        <br>
                     </div>
                 @endforeach
             </div>
         @endforeach
     </div>
-
-    <script>
-        function filterBooks() {
-            const checkbox = document.getElementById('formCheck-1');
-            const books = document.querySelectorAll('#bookContainer .col-md-6');
-
-            books.forEach(book => {
-                const isRead = book.getAttribute('data-read') === 'tak';
-                console.log(book.getAttribute('data-read'));
-                if (!(checkbox.checked && !isRead)) {
-                    book.style.display = 'none'; // Hide unread books
-                }else {
-                    book.style.display = 'block'; // Show unread books
-                }
-            });
-        }
-    </script>
-
-
     <footer class="text-center">
         <div class="container text-muted py-4 py-lg-5">
             <ul class="list-inline"></ul>
@@ -215,6 +204,27 @@
         </div>
     </footer>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const checkbox = document.getElementById('formCheck-1');
+        const bookCards = document.querySelectorAll('.book-card');
+
+        checkbox.addEventListener('change', function() {
+            const isChecked = this.checked;
+
+            bookCards.forEach(card => {
+                const readAttribute = card.getAttribute('data-read');
+                if ((isChecked && readAttribute !== 'nie') || !isChecked) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+
+</script>
+
 
 </body>
 

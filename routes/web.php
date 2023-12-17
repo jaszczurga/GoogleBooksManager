@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 //routing zapewniajacy zapisanie notatki do bazy danych
     Route::put("/myBooks/update/{id}",[PageController::class,'update'])->name('update');
+    Route::put("/myBooks/updateRead/{id}",[PageController::class,'updateRead'])->name('updateRead');
 });
 
 //Route::post('auth/register', [UserController::class, 'createUser']);
