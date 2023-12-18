@@ -72,7 +72,8 @@ class PageController extends Controller
 
             $this->storeBookDetails($bookData);
         } else {
-            $response = Http::get('https://www.googleapis.com/books/v1/volumes?q=' . $id);
+            //$response = Http::get('https://www.googleapis.com/books/v1/volumes?q=' . $id);
+            $response = Http::get('https://www.googleapis.com/books/v1/volumes/' . urlencode($id));
 
 //            if ($response->successful()) {
 //                $bookData = $response->json()['items'][0];
@@ -86,18 +87,19 @@ class PageController extends Controller
 //                return redirect('/')->with('error', 'Failed to fetch data from the API.');
 //            }
             if ($response->successful()) {
-                $this->books = $response->json()['items'];
-
-                foreach ($this->books as $b) {
-                    if ($b['id'] == $id) {
-                        $bookData = $b;
+                //$this->books = $response->json()['items'];
+                $this->books = $response->json();
+                $bookData = $this->books;
+               // foreach ($this->books as $b) {
+                    //if ($b['id'] == $id) {
+                     //   $bookData = $b;
 
                         // Cache the book data for 60 minutes (adjust this as needed)
                         Cache::put($cacheKey, $bookData, now()->addMinutes(60));
                         $bookData = $this->checkCorrect($bookData);
                         $this->storeBookDetails($bookData);
-                    }
-                }
+                   // }
+               // }
             } else {
                 return redirect('/')->with('error', 'Failed to fetch data from the API.');
             }
@@ -163,22 +165,25 @@ class PageController extends Controller
             $bookData = $this->checkCorrect($bookData);
             return view('bookDetails')->with('book', $bookData);
         } else {
-            $response = Http::get('https://www.googleapis.com/books/v1/volumes?q=' . urlencode($id));
+            //$response = Http::get('https://www.googleapis.com/books/v1/volumes?q=' . urlencode($id));
+            $response = Http::get('https://www.googleapis.com/books/v1/volumes/' . urlencode($id));
 
             if ($response->successful()) {
-                $this->books = $response->json()['items'];
+                //$this->books = $response->json()['items'];
+                $this->books = $response->json();
+                $bookData = $this->books;
 
-                foreach ($this->books as $b) {
-                    if ($b['id'] == $id) {
-                        $bookData = $b;
+                //foreach ($this->books as $b) {
+                    //if ($b['id'] == $id) {
+                      //  $bookData = $b;
 
                         // Cache the book data for 60 minutes (adjust this as needed)
                         Cache::put($cacheKey, $bookData, now()->addMinutes(60));
                         $bookData = $this->checkCorrect($bookData);
 
                         return view('bookDetails')->with('book', $bookData);
-                    }
-                }
+                   // }
+                //}
             } else {
                 return redirect('/')->with('error', 'Failed to fetch data from the API.');
             }
