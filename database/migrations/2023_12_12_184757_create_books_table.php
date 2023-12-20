@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('book_id');
             $table->string('tytul');
             $table->string('autor');
-            $table->string('img');
+            $table->text('img');
             $table->text('notatka');
             $table->string('user_id');
             $table->string('przeczytana')->default("nie");

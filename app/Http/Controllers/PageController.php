@@ -16,6 +16,7 @@ class PageController extends Controller
     private $query = 'python';
 
     public function index(){
+
         $userName = Auth::user()->name;
         $cacheKey = 'books_query_' . $this->query;
 
@@ -39,6 +40,9 @@ class PageController extends Controller
     }
 
     public function search(Request $request){
+
+        $startTime = microtime(true); // Record start time
+
         $userName = Auth::user()->name;
         $query = $request->input('query');
         $cacheKey = 'books_query_' . $query;
@@ -53,10 +57,18 @@ class PageController extends Controller
                 Cache::put($cacheKey, $this->books, now()->addMinutes(60));
             } else {
                 $errors = ['wpisz ksiazke ktora chcesz wyszukac'];
+
+                $endTime = microtime(true);
+                $executionTime = round(($endTime - $startTime) * 1000, 2); // in milliseconds
+                Log::info('Execution time for search '.$query.' function: ' . $executionTime . ' milliseconds');
+
                 return redirect('/')->withErrors($errors);
             }
         }
 
+        $endTime = microtime(true);
+        $executionTime = round(($endTime - $startTime) * 1000, 2); // in milliseconds
+        Log::info('Execution time for search '.$query.' function: ' . $executionTime . ' milliseconds');
 //        return view('index')->with('books', $this->books);
         return view('index')->with(['books' => $this->books, 'userName' => $userName]);
     }
