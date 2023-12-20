@@ -51,7 +51,8 @@
         </div>
 
     </div>
-<div class="container py-4 py-xl-5" style="margin-left: 72px;padding-left: 43px;">
+</div>
+<div class="container py-4 py-xl-5" style="margin-left: auto;margin-right: auto; padding-left: 88px; width: auto">
     <div class="row mb-5">
         <div class="col-md-8 col-xl-6 text-center mx-auto">
             <h2>Witaj {{$userName}}</h2>
