@@ -51,8 +51,8 @@ class PageController extends Controller
             $this->books = Cache::get($cacheKey);
         } else {
             $response = Http::get('https://www.googleapis.com/books/v1/volumes?q=' . urlencode($query));
-
-            if ($response->successful()) {
+            Log::info($response);
+            if ($response->successful() && $response->json()['totalItems'] > 0) {
                 $this->books = $response->json()['items'];
                 Cache::put($cacheKey, $this->books, now()->addMinutes(60));
             } else {
