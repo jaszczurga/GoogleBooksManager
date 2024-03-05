@@ -35,7 +35,7 @@ class PageController extends Controller
             }
         }
 
-       // return view('index')->with('books', $this->books);
+
         return view('index')->with(['books' => $this->books, 'userName' => $userName]);
     }
 
@@ -69,7 +69,7 @@ class PageController extends Controller
         $endTime = microtime(true);
         $executionTime = round(($endTime - $startTime) * 1000, 2); // in milliseconds
         Log::info('Execution time for search '.$query.' function: ' . $executionTime . ' milliseconds');
-//        return view('index')->with('books', $this->books);
+
         return view('index')->with(['books' => $this->books, 'userName' => $userName]);
     }
 
@@ -84,27 +84,14 @@ class PageController extends Controller
 
             $this->storeBookDetails($bookData);
         } else {
-            //$response = Http::get('https://www.googleapis.com/books/v1/volumes?q=' . $id);
             $response = Http::get('https://www.googleapis.com/books/v1/volumes/' . urlencode($id));
 
-//            if ($response->successful()) {
-//                $bookData = $response->json()['items'][0];
-//
-//
-//                // Cache the book data for 60 minutes (adjust this as needed)
-//                Cache::put($cacheKey, $bookData, now()->addMinutes(60));
-//                // Store book details in the database
-//                $this->storeBookDetails($bookData);
-//            } else {
-//                return redirect('/')->with('error', 'Failed to fetch data from the API.');
-//            }
+
             if ($response->successful()) {
-                //$this->books = $response->json()['items'];
+
                 $this->books = $response->json();
                 $bookData = $this->books;
-               // foreach ($this->books as $b) {
-                    //if ($b['id'] == $id) {
-                     //   $bookData = $b;
+
 
                         // Cache the book data for 60 minutes (adjust this as needed)
                         Cache::put($cacheKey, $bookData, now()->addMinutes(60));
@@ -177,17 +164,14 @@ class PageController extends Controller
             $bookData = $this->checkCorrect($bookData);
             return view('bookDetails')->with('book', $bookData);
         } else {
-            //$response = Http::get('https://www.googleapis.com/books/v1/volumes?q=' . urlencode($id));
+
             $response = Http::get('https://www.googleapis.com/books/v1/volumes/' . urlencode($id));
 
             if ($response->successful()) {
-                //$this->books = $response->json()['items'];
+
                 $this->books = $response->json();
                 $bookData = $this->books;
 
-                //foreach ($this->books as $b) {
-                    //if ($b['id'] == $id) {
-                      //  $bookData = $b;
 
                         // Cache the book data for 60 minutes (adjust this as needed)
                         Cache::put($cacheKey, $bookData, now()->addMinutes(60));

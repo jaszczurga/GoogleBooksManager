@@ -25,11 +25,7 @@ class UserController extends Controller
                 ]);
 
             if($validateUser->fails()){
-//                return response()->json([
-//                    'status' => false,
-//                    'message' => 'validation error',
-//                    'errors' => $validateUser->errors()
-//                ], 401);
+
                 return redirect('/register')->with('errors', $validateUser->errors());
             }
 
@@ -42,10 +38,9 @@ class UserController extends Controller
             $result =  response()->json([
                 'status' => true,
                 'message' => 'User Created Successfully',
-              //  'token' => $user->createToken("API TOKEN")->plainTextToken
+
             ], 200);
 
-//            $user->createToken("API TOKEN")->plainTextToken;
             return redirect('/')->with('result', $result);
 
 
@@ -106,9 +101,9 @@ class UserController extends Controller
     public function logout()
     {
         try {
-//            auth()->user()->currentAccessToken()->delete();
+
             Auth::guard('web')->logout();
-          //  Auth::guard('sanctum')->user()->tokens()->delete();
+
             $result =  response()->json([
                 'status' => true,
                 'message' => 'User Logged Out Successfully',
